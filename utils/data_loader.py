@@ -25,6 +25,8 @@ def get_dataset_info(df: pd.DataFrame) -> dict:
         'memory_usage': df.memory_usage(deep=True).sum() /1024**2,
         'column_types': df.dtypes.value_counts().to_dict(),
         'missing_values': df.isnull().sum().sum(),
+        # Backwards-compatibility: some callers expect `missing_total` key
+        'missing_total': int(df.isnull().sum().sum()),
         'duplicate_rows': df.duplicated().sum()
     }
     return info
