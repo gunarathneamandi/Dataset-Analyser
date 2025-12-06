@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" href="logo192.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="H2O Wave App" />
+  <link rel="manifest" href="manifest.json" crossorigin="use-credentials" />
+  
+  <title>H2O Wave</title>
+  <script type="module" crossorigin src="./wave-static/index-c82f0622.js"></script>
+  <link rel="stylesheet" href="./wave-static/index-be05b8a6.css">
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="wave-root"></div>
+  <!-- Ensure this JS runs absolutely first to avoid race conditions. -->
+  <script>
+    const nonce = document.body.dataset.nonce
+    const originalInsertBefore = Element.prototype.insertBefore
+    const originalAppendChild = Element.prototype.appendChild
+    window.CSPSettings = { nonce }
+    Element.prototype.insertBefore = function (newNode, referenceNode) {
+      if (nonce && newNode.nodeType === 1 && newNode.hasAttribute("data-merge-styles")) {
+        newNode.setAttribute("nonce", nonce)
+      }
+      return originalInsertBefore.call(this, newNode, referenceNode)
+    }
+    Element.prototype.appendChild = function (newNode) {
+      if (nonce && newNode.nodeType === 1 && (newNode.nodeName === 'SCRIPT' || newNode.nodeName === 'STYLE')) {
+        newNode.setAttribute("nonce", nonce)
+      }
+      return originalAppendChild.call(this, newNode)
+    };
+  </script>
+  
+</body>
+
+</html>

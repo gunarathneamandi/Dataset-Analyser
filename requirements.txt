@@ -1,0 +1,7 @@
+h2o-wave
+pandas
+numpy
+anthropic
+openpyxl
+scikit-learn
+scipy
