@@ -29,6 +29,29 @@ def get_dataset_info(df: pd.DataFrame) -> dict:
     }
     return info
 
+def get_column_stats(df: pd.DataFrame) -> pd.DataFrame:
+    stats = []
+    for col in df.columns:
+        col_info = {
+            'column': col,
+            'dtype': str(df[col].dtype),
+            'missing': df[col].isnull().sum(),
+            'missing_pct': round(df[col].isnull().sum() / len(df) * 100, 2),
+            'unique': df[col].nunique(),
+            'unique_pct': round(df[col].nunique() / len(df) * 100, 2)
+        }
+        
+        if pd.api.types.is_numeric_dtype(df[col]):
+            col_info.update({
+                'mean': round(df[col].mean(), 2) if df[col].notna().any() else None,
+                'std': round(df[col].std(), 2) if df[col].notna().any() else None,
+                'min': df[col].min() if df[col].notna().any() else None,
+                'max': df[col].max() if df[col].notna().any() else None
+            })
+        
+        stats.append(col_info)
+    
+    return pd.DataFrame(stats)
 
 
 
